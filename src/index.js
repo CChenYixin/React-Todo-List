@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import $ from 'jquery';
+import sawako from './sawako.js';
 
 function component() {
   var element = $('<div></div>');
@@ -11,3 +12,5 @@ function component() {
 }
 
 document.body.appendChild(component());
+console.log(sawako);
+console.log(sawako());
