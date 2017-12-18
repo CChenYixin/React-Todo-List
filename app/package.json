@@ -2,7 +2,7 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
-  "homepage":"http://chenyixin.win/React-Todo-List/app/build",
+  "homepage": "http://chenyixin.win/React-Todo-List/app/build",
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
