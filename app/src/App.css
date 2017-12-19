@@ -14,3 +14,11 @@
 .App-title {
     font-size: 1.5em;
 }
+
+.App > .todoList> li:nth-child(odd){
+    background: #eee;
+}
+
+.App > .todoList> li:nth-child(even){
+    background: transparent;
+}
