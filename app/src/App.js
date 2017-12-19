@@ -9,7 +9,7 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            newTodo:"测试",
+            newTodo:" ",
             todoList:[
                 {id:1,title:'第一个待办事项'},
                 {id:2,title:'第二个待办事项'}
@@ -31,7 +31,7 @@ class App extends Component {
             <div className = "App">
                 <h1>我的待办事项</h1>
                 <div className = "inputWrapper">
-                    <TodoInput content="{this.state.newTodo}" />
+                    <TodoInput content = {this.state.newTodo} />
                 </div>
                 <ol>
                     {todos}
