@@ -4,16 +4,16 @@ import './reset.css';
 import 'normalize.css';
 import TodoInput from './TodoInput';
 import TodoItem from './TodoItem';
+import * as localStore from './localStore';
+
+
 
 class App extends Component {
     constructor(props){
         super(props);
         this.state = {
             newTodo:'',
-            todoList:[
-                {id:1,title:'第一个待办事项'},
-                {id:2,title:'第二个待办事项'}
-            ]
+            todoList:localStore.load('todoList') || []
         }
     }
 
@@ -44,6 +44,10 @@ class App extends Component {
                 </ol>
             </div>
         );
+    }
+
+    componentDidUpdate(){
+        localStore.save('todoList', this.state.todoList);
     }
 
     toggle(e,todo){
