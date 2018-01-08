@@ -61,7 +61,10 @@ class App extends Component {
   signOut(){
     signOut()
     let stateCopy = JSON.parse(JSON.stringify(this.state))
-    stateCopy.user = {}
+    console.log(stateCopy);
+    stateCopy.user = {};
+    stateCopy.newTodo = '';
+    stateCopy.todoList = [];
     this.setState(stateCopy)
   }
 
