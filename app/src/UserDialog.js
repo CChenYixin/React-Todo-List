@@ -41,7 +41,8 @@ export default class UserDialog extends Component {
         e.preventDefault();
         let {username, password} = this.state.formData;
         let success = (user) => {
-            this.props.onSignIn.call(null, user)
+            this.props.onSignIn.call(null,user);
+            this.props.todoInit.call(null);
         };
 
         let error = (error) => {
@@ -63,42 +64,31 @@ export default class UserDialog extends Component {
         this.setState(stateCopy);
     }
 
+    showForgotPassword() {
+        let stateCopy = JSON.parse(JSON.stringify(this.state));
+        stateCopy.selectedTeb = 'forgotPassword';
+        this.setState(stateCopy);
+    }
+    returnToSignIn() {
+        let stateCopy = JSON.parse(JSON.stringify(this.state))
+        stateCopy.selectedTeb = 'signInOrSignUp';
+        this.setState(stateCopy);
+    }
+    resetPassword(e) {
+        e.preventDefault();
+        sendPasswordResetEmail(this.state.formData.email);
+    }
+
     render() {
         return (
             <div className="UserDialog-Wrapper">
                 <div className="UserDialog">
-                    {this.state.selectedTab === 'signInOrSignUp' ?
-                        <SignInOrSignUp
-                            formData={this.state.formData}
-                            onSignIn={this.signIn.bind(this)}
-                            onSignUp={this.signUp.bind(this)}
-                            onChange={this.changeFormData.bind(this)}
-                            onForgotPassword={this.showForgotPassword.bind(this)}/> :
-                        <ForgotPasswordForm
-                            formData={this.state.formData}
-                            onSubmit={this.resetPassword.bind(this)}
-                            onChange={this.changeFormData.bind(this)}
-                            onSignIn={this.returnToSignIn.bind(this)}
-                        />
+                    {this.state.selectedTab === 'signInOrSignUp'
+                        ? <SignInOrSignUp formData={this.state.formData} onSignIn={this.signIn.bind(this)} onSignUp={this.signUp.bind(this)} onChange={this.changeFormData.bind(this)} onForgotPassword={this.showForgotPassword.bind(this)}/>
+                        : <ForgotPasswordForm formData={this.state.formData} onSubmit={this.resetPassword.bind(this)} onChange={this.changeFormData.bind(this)} onSignIn={this.returnToSignIn.bind(this)}/>
                     }
                 </div>
             </div>
         )
     }
-
-    showForgotPassword() {
-        let stateCopy = JSON.parse(JSON.stringify(this.state))
-        stateCopy.selectedTab = 'forgotPassword'
-        this.setState(stateCopy)
-    }
-    returnToSignIn() {
-        let stateCopy = JSON.parse(JSON.stringify(this.state))
-        stateCopy.selectedTab = 'signInOrSignUp'
-        this.setState(stateCopy)
-    }
-    resetPassword(e) {
-        e.preventDefault()
-        sendPasswordResetEmail(this.state.formData.email)
-    }
-
 }
