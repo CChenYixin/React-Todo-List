@@ -5,7 +5,7 @@ import 'normalize.css';
 import TodoInput from './TodoInput';
 import TodoItem from './TodoItem';
 import UserDialog from './UserDialog';
-import {getCurrentUser, signOut} from './leanCloud'
+import {getCurrentUser, signOut, TodoModel} from './leanCloud';
 
 class App extends Component {
     constructor(props) {
@@ -14,6 +14,16 @@ class App extends Component {
             user: getCurrentUser() || {},
             newTodo: '',
             todoList: []
+        }
+
+        let user = getCurrentUser();
+
+        if (user) {
+            TodoModel.getByUser(user, (todos) => {
+                let stateCopy = JSON.parse(JSON.stringify(this.state));
+                stateCopy.todoList = todos;
+                this.setState(stateCopy);
+            })
         }
     }
 
@@ -41,7 +51,7 @@ class App extends Component {
                 </ol>
                 {this.state.user.id
                     ? null
-                    : <UserDialog onSignUp={this.onSignUpOrSignIn.bind(this)}  onSignIn={this.onSignUpOrSignIn.bind(this)}/>}
+                    : <UserDialog onSignUp={this.onSignUpOrSignIn.bind(this)} onSignIn={this.onSignUpOrSignIn.bind(this)}/>}
             </div>
         );
     }
@@ -52,7 +62,7 @@ class App extends Component {
         stateCopy.user = {};
         this.setState(stateCopy);
     }
-    onSignUpOrSignIn(user){
+    onSignUpOrSignIn(user) {
         let stateCopy = JSON.parse(JSON.stringify(this.state));
         stateCopy.user = user;
         this.setState(stateCopy);
@@ -61,10 +71,14 @@ class App extends Component {
     componentDidUpdate() {}
 
     toggle(e, todo) {
-        todo.status = todo.status === 'completed'
-            ? ''
-            : 'completed';
-        this.setState(this.state);
+        let oldStatus = todo.status;
+        todo.status = todo.status === 'completed' ? '': 'completed';
+        TodoModel.update(todo, () => {
+            this.setState(this.state)
+        }, (error) => {
+            todo.status = oldStatus
+            this.setState(this.state)
+        });
     }
 
     changeTitle(event) {
@@ -72,22 +86,28 @@ class App extends Component {
     }
 
     addTodo(event) {
-        this.state.todoList.push({id: idMaker(), title: event.target.value, status: null, deleted: false})
-        this.setState({newTodo: '', todoList: this.state.todoList})
+        let newTodo = {
+            title: event.target.value,
+            status: '',
+            deleted: false
+        }
+
+        TodoModel.create(newTodo, (id) => {
+            newTodo.id = id
+            this.state.todoList.push(newTodo)
+            this.setState({newTodo: '', todoList: this.state.todoList})
+        }, (error) => {
+            console.log(error)
+        })
     }
 
     delete(event, todo) {
-        todo.deleted = true;
-        this.setState(this.state);
+        TodoModel.destroy(todo.id, () => {
+            todo.deleted = true;
+            this.setState(this.state);
+        })
     }
 
 }
 
 export default App;
-
-let id = 0;
-
-function idMaker() {
-    id += 1;
-    return id;
-}
