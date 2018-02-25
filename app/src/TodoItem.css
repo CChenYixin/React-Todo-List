@@ -1,10 +1,20 @@
-.TodoItem {
-    padding: .5em;
-    display: flex;
-    align-items: center;
-}
 
-.TodoItem>.title {
-    flex-grow: 1;
-    padding: 0 .5em;
+.items{
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  flex-wrap: nowrap;
+}
+.items button{
+  float: right;
+}
+.items p{
+  margin: 5px 0;
+  padding: 0 5px;
+  flex-grow: 1;
+  color: #000;
+}
+.items label .ant-checkbox{
+  margin: 5px;
 }

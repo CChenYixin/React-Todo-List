@@ -1,26 +1,35 @@
 import React, { Component } from 'react';
+import { Button } from 'antd';
+import { Checkbox } from 'antd';
 import './TodoItem.css';
 
-class TodoItem extends Component{
-    render(){
-        return(
-            <div className='TodoItem'>
-                <input type='checkbox' checked={this.props.todo.status === 'completed'}
-                onChange={this.toggle.bind(this)} />
-                <span className="title">{this.props.todo.title}</span>
-                <button onClick={this.delete.bind(this)}>删除</button>
-            </div>
-        )
-    }
+export default class TodoItem extends Component{
+  constructor(props){
+    super(props)
 
-    toggle(e){
-        this.props.onToggle(e,this.props.todo);
-    }
+    this.toggle = this.toggle.bind(this)
+    this.delete = this.delete.bind(this)
+  }
 
-    delete(e){
-        this.props.onDelete(e, this.props.todo);
-    }
+  toggle(e){
+    this.props.onToggle(e,this.props.todo)
+  }
+  delete(e){
+    this.props.onDelete(e,this.props.todo)
+  }
+
+
+  render(){
+    return(
+      <div className='items'>
+        <Checkbox checked={this.props.todo.status === 'completed'}
+          onChange = {this.toggle}
+        ></Checkbox>
+        <p>{this.props.todo.title}</p>
+        <Button type='danger' onClick = {this.delete}> 删除 </Button>
+      </div>
+    )
+  }
+
 
 }
-
-export default TodoItem;

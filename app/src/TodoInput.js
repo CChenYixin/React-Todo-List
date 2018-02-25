@@ -1,21 +1,37 @@
-import React from 'react';
-import './TodoInput.css';
+import React,{ Component } from 'react';
+import { Input } from 'antd';
 
-function submit(props, e) {
-    if (e.key === 'Enter') {
-        if(e.target.value.trim() !== '') {
-            props.onSubmit(e);
-        }
+export default class TodoInput extends Component {
+
+  constructor(props){
+    super(props)
+
+    this.submit = this.submit.bind(this)
+    this.changeTitle = this.changeTitle.bind(this)
+
+  }
+
+
+  submit(e){
+    if(e.key === 'Enter'){
+      if(e.target.value.trim() !== ''){
+        this.props.onSubmit(e)
+        e.target.value = ''
+      }
     }
-}
-function changeTitle(props, e) {
-    props.onChange(e)
-}
+  }
+  changeTitle(e){
+    this.props.onChange(e)
+  }
 
-export default function(props) {
-    return (
-        <input type="text" value={props.content} className="TodoInput"
-            onChange={changeTitle.bind(null, props)}
-            onKeyPress={submit.bind(null, props)}/>
-    )
+  render(){
+    return <Input type='text' placeholder="Please input"
+      defaultValue={this.props.content}
+      onChange={this.changeTitle}
+      onKeyPress = {this.submit}
+    />
+  }
+
+
+
 }
